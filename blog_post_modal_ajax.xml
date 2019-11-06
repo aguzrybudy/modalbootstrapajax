@@ -1,0 +1,720 @@
+<p>Assalmualaikum Warahmatullahi Wabarakatu<br />
+Bismillahirrahmanirrahiim</p>
+
+<p>Halo semuanya apa kabar kalian hari ini?, saya harap kalian semua senantiasa dalam keadaan yang&nbsp; baik-baik saja dan selalu dalam lindungan Allah SWT. dimana saja kalian berada. Tutorial yang akan saya bahas kali ini adalah tutorial tentang pemrograman PHP yaitu tentang CRUD PHP MySQLi Menggunakan Modal Bootstrap &amp; Ajax.</p>
+
+<p>Oke langsung saja, agar kalian tidak bingung saya akan membahas satu persatu dari judul diatas terlebih dahulu</p>
+
+<p><strong>CRUD</strong> merupakan istilah yang merupakan singkatan dari <strong>Create, Read, Update dan Delete</strong> sudahkah kalian mendengarnya. Jika belum akan saya perjelas secara rinci.</p>
+
+<p><strong>Create </strong>yang berarti membuat sebuah data baru, contoh kita sedang melakukan registrasi disebuah web itu sudah merupakan Create dari CRUD karena kita membuat dan menyimpan data registrasi ke database.<br />
+<strong>Read </strong>membaca atau menampilkan suatu data yang tadinya berada didatabase MySQL misalnya, kemudian ditampilkan di WEB menggunakan bahasa pemrograman PHP<br />
+<strong>Update </strong>untuk yang satu ini prosesnya adalah mengedit sebuah data dari database yang kemudian di edit menggunakan bahasa pemrograman PHP berupa WEB.<br />
+<strong>Delete </strong>Pastinya kalian tahu fungsinya apa bukan? Fungsinya hampir sama dengan Update akan tetapi proses ini adalah untuk melakukan penghapusan data di database melalui bahasa PHP.</p>
+
+<p><strong>PHP </strong>adalah bahasa pemrograman yang sering disisipkan ke dalam HTML. PHP sendiri berasal dari kata Hypertext Preprocessor. Sejarah PHP pada awalnya merupakan kependekan dari Personal Home Page (Situs personal). PHP pertama kali dibuat oleh Rasmus Lerdorf pada tahun 1995. Pada waktu itu PHP masih bernama Form Interpreted (FI), yang wujudnya berupa sekumpulan skrip yang digunakan untuk mengolah data formulir dari web.</p>
+
+<p>Penjelasan Tentang <strong>MySQLi</strong>. Pernahkan Anda mengalami masalah dengan munculnya pesan error The mysql extension is deprecated and will be removed in the future. Ya, pesan itu muncul karena Query yang Anda gunakan adalah <strong>MySQL</strong>, dan Command <strong>MySQL </strong>ini akan di hapus kedepannya, dan tidak di support lagi. Jadi jika Script yang Anda gunakan masih <strong>MySQL</strong>, sekarang harus bersiap-siap untuk migrasi menggunakan <strong>MySQLi</strong>. <strong>MySQLi</strong>, dimana i ini mempunyai kepanjangan inproved yang berarti ditingkatkan. Nah dari arti ini saja kita sudah paham bahwa <strong>MySQLi </strong>adalah hasil pengembangan dari <strong>MySQL </strong>itu sendiri.</p>
+
+<p><strong>Modal Bootstrap</strong> adalah sebuah <strong>kotak dialog</strong> atau sering di sebut dengann popup yang menampilkan pesan atau konfirmasi untuk suatu aksi, anda bisa membuat promosi dengan modal, membuat persetujuan untuk suatu aksi, misalnya anda membuat aksi untuk menghapus suatu data maka anda bisa menggunakan modal untuk membuat pertanyaan konfirmasi seperti misalnya &ldquo;apakah anda yakin ingin menghapus data ini ?&rdquo;. banyak lagi kegunaan dari modal karena anda juga bisa menampilkan data dalam bentuk modal.</p>
+
+<p><strong>AJAX </strong>adalah sebuah singkatan dari Asynchronous Javascript and XML dan mengacu pada sekumpulan teknis pengembangan web (web development) yang memungkinkan aplikasi web untuk bekerja secara asynchronous (tidak langsung) &ndash; memproses setiap request (permintaan) yang datang ke server di sisi background.</p>
+
+<p>Penjelasan diatas gunanya untuk membantu Anda sekalian agar bisa lebih paham untuk tutorial mengikuti tutorial ini.</p>
+
+<p><strong>Langkah Pertama</strong><br />
+Dowload file-fle yang dibutuhkan disini</p>
+
+<p><strong>Langkah Kedua</strong><br />
+Extract file bootstrap dan jquery yang sobat download kedalam root aplikasi sobat, root aplikasi saya di c:\xampp\htdocs\php7\modalajax, sesuaikan dengan folder root yang sobat miliki.</p>
+
+<p><strong>Langkah Ketiga</strong><br />
+Sobat buat database, database milik saya namanya dbphp7, kalau untuk sobat terserah mau buat apa namanya tapi saran saya gunakan nama yang sama, dan buat tabel dengan nama modal</p>
+
+<pre data-codetype="PHP">
+CREATE TABLE `modal` (
+  `modal_id` int(11) NOT NULL AUTO_INCREMENT,
+  `modal_name` varchar(255) DEFAULT NULL,
+  `description` text,
+  `date` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`modal_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;</pre>
+
+<p><strong>Langkah Keempat</strong><br />
+Setelah ketiga langka diatas sobat lakukan, ketiklah kode dibawah ini, simpan dengan nama, index.php</p>
+
+<pre data-codetype="PHP">
+&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;title&gt;CRUD PHP MySQLi Modal Bootstrap | Aguzrybudy.com&lt;/title&gt;
+&lt;meta content=&quot;width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0&quot; name=&quot;viewport&quot;/&gt;
+&lt;meta content=&quot;Aguzrybudy&quot; name=&quot;author&quot;/&gt;
+&lt;link href=&quot;bootstrap/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;script src=&quot;jquery/jquery-3.3.1.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;bootstrap/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+ 
+&lt;div class=&quot;container mt-5 mb-5&quot;&gt;
+  &lt;h2&gt;CRUD PHP MySQLi Modal Bootstrap&lt;/h2&gt;
+  &lt;p&gt;CRUD PHP MySQLi Modal Bootstrap By Aguzrybudy, Rabu 06 November 2019&lt;/p&gt;
+  &lt;p class=&quot;text-right&quot;&gt;&lt;a href=&quot;javascript.void(0)&quot; class=&quot;btn btn-success&quot; data-target=&quot;#ModalAdd&quot; data-toggle=&quot;modal&quot;&gt;Add Data&lt;/a&gt; &lt;a href=&quot;datatable.php&quot; class=&quot;btn btn-info&quot; &gt;Datatable&lt;/a&gt;&lt;/p&gt;      
+
+&lt;table id=&quot;mytable&quot; class=&quot;table table-bordered&quot;&gt;
+    &lt;thead&gt;
+      &lt;th&gt;No&lt;/th&gt;
+      &lt;th&gt;Name&lt;/th&gt;
+      &lt;th&gt;Description&lt;/th&gt;
+      &lt;th&gt;Action&lt;/th&gt;
+    &lt;/thead&gt;
+	&lt;tbody id=&quot;modal-data&quot;&gt;
+&lt;?php 
+  //menampilkan data mysqli
+  include &quot;koneksi.php&quot;;
+  $no = 0;
+  $modal=mysqli_query($koneksi,&quot;SELECT * FROM modal ORDER BY modal_id DESC&quot;);
+  while($r=mysqli_fetch_array($modal)){
+  $no++;
+       
+?&gt;
+  &lt;tr&gt;
+      &lt;td&gt;&lt;?php echo $no; ?&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;?php echo  $r[&#39;modal_name&#39;]; ?&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;?php echo  $r[&#39;description&#39;]; ?&gt;&lt;/td&gt;
+      &lt;td&gt;
+         &lt;a href=&quot;javascript:void(0)&quot; class=&#39;open_modal&#39; id=&#39;&lt;?php echo  $r[&#39;modal_id&#39;]; ?&gt;&#39;&gt;Edit&lt;/a&gt;
+         &lt;a href=&quot;javascript:void(0)&quot; class=&quot;delete_modal&quot; data-id=&#39;&lt;?php echo  $r[&#39;modal_id&#39;]; ?&gt;&#39;&gt;Delete&lt;/a&gt;
+      &lt;/td&gt;
+  &lt;/tr&gt;
+ 
+
+&lt;?php } ?&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;!-- Modal Popup untuk Add--&gt; 
+&lt;div id=&quot;ModalAdd&quot; class=&quot;modal fade&quot; tabindex=&quot;-1&quot; role=&quot;dialog&quot; aria-labelledby=&quot;myModalLabel&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;div class=&quot;modal-dialog&quot;&gt;
+    &lt;div class=&quot;modal-content&quot;&gt;
+
+       &lt;div class=&quot;modal-header&quot;&gt;
+        &lt;h5 class=&quot;modal-title&quot;&gt;Add Data Using Modal Boostrap (popup)&lt;/h5&gt;
+        &lt;button type=&quot;button&quot; class=&quot;close&quot; data-dismiss=&quot;modal&quot; aria-label=&quot;Close&quot;&gt;
+          &lt;span aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/span&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+
+        &lt;div class=&quot;modal-body&quot;&gt;
+          &lt;form id=&quot;form-save&quot; action=&quot;proses_save.php&quot; name=&quot;modal_popup&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;&gt;
+            
+                &lt;div class=&quot;form-group&quot; style=&quot;padding-bottom: 20px;&quot;&gt;
+                  &lt;label for=&quot;Modal Name&quot;&gt;Modal Name&lt;/label&gt;
+                  &lt;input type=&quot;text&quot; name=&quot;modal_name&quot;  id=&quot;modal-name&quot; class=&quot;form-control&quot; placeholder=&quot;Modal Name&quot; required/&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;form-group&quot; style=&quot;padding-bottom: 20px;&quot;&gt;
+                  &lt;label for=&quot;Description&quot;&gt;Description&lt;/label&gt;
+                   &lt;textarea name=&quot;description&quot; id=&quot;description&quot; class=&quot;form-control&quot; placeholder=&quot;Description&quot; required/&gt;&lt;/textarea&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;form-group&quot; style=&quot;padding-bottom: 20px;&quot;&gt;
+                  &lt;label for=&quot;Date&quot;&gt;Date&lt;/label&gt;
+                  &lt;input type=&quot;text&quot; name=&quot;date&quot;  class=&quot;form-control&quot; plcaceholder=&quot;Timestamp&quot; disabled value=&quot;&lt;?php echo date(&#39;Y-m-d H:i:s&#39;);?&gt;&quot; required/&gt;
+                &lt;/div&gt;
+
+              &lt;div class=&quot;modal-footer&quot;&gt;
+                  &lt;button class=&quot;btn btn-success&quot; type=&quot;submit&quot;&gt;
+                      Save
+                  &lt;/button&gt;
+
+                  &lt;button type=&quot;reset&quot; class=&quot;btn btn-danger&quot;  data-dismiss=&quot;modal&quot; aria-hidden=&quot;true&quot;&gt;
+                    Cancel
+                  &lt;/button&gt;
+              &lt;/div&gt;
+
+              &lt;/form&gt;
+
+           
+
+            &lt;/div&gt;
+
+           
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Modal Popup untuk Edit--&gt; 
+&lt;div id=&quot;ModalEdit&quot; class=&quot;modal fade&quot; tabindex=&quot;-1&quot; role=&quot;dialog&quot; aria-labelledby=&quot;myModalLabel&quot; aria-hidden=&quot;true&quot;&gt;
+
+&lt;/div&gt;
+
+&lt;!-- Modal Popup untuk delete--&gt; 
+&lt;div class=&quot;modal fade&quot; id=&quot;modal_delete&quot;&gt;
+  &lt;div class=&quot;modal-dialog&quot;&gt;
+    &lt;div class=&quot;modal-content&quot; style=&quot;margin-top:100px;&quot;&gt;
+	  
+	  &lt;div class=&quot;modal-header&quot;&gt;
+        &lt;h5 class=&quot;modal-title&quot;&gt;Are you sure to delete this data ?&lt;/h5&gt;
+        &lt;button type=&quot;button&quot; class=&quot;close&quot; data-dismiss=&quot;modal&quot; aria-label=&quot;Close&quot;&gt;
+          &lt;span aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/span&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+                
+      &lt;div class=&quot;modal-footer&quot; style=&quot;margin:0px; border-top:0px; text-align:center;&quot;&gt;
+        &lt;button type=&quot;button&quot;class=&quot;btn btn-danger&quot; id=&quot;delete_link&quot;&gt;Delete&lt;/button&gt;
+        &lt;button type=&quot;button&quot; class=&quot;btn btn-success&quot; data-dismiss=&quot;modal&quot;&gt;Cancel&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+
+&lt;!-- Javascript untuk popup modal Edit--&gt; 
+&lt;script type=&quot;text/javascript&quot;&gt;
+ $(document).ready(function () {
+   $(&quot;.open_modal&quot;).click(function(e) {
+       var m = $(this).attr(&quot;id&quot;);
+		   $.ajax({
+				   url: &quot;modal_edit.php&quot;,
+				   type: &quot;GET&quot;,
+				   data : {modal_id: m,},
+				   success: function (ajaxData){
+				   $(&quot;#ModalEdit&quot;).html(ajaxData);
+				   $(&quot;#ModalEdit&quot;).modal(&#39;show&#39;,{backdrop: &#39;true&#39;});
+			   }
+			});
+        });
+    });
+&lt;/script&gt;
+
+
+&lt;!-- Ajax untuk menyimpan data--&gt; 
+&lt;script type=&quot;text/javascript&quot;&gt;
+    $(&quot;#form-save&quot;).on(&#39;submit&#39;, function(e){
+		e.preventDefault();
+		$.ajax({
+			method:  $(this).attr(&quot;method&quot;), // untuk mendapatkan attribut method pada form
+			url: $(this).attr(&quot;action&quot;),  // untuk mendapatkan attribut action pada form
+			data: { 
+				modal_name: $(&#39;#modal-name&#39;).val(),
+				description: $(&#39;#description&#39;).val(),
+			},
+			success:function(response){
+				console.log(response);
+				$(&quot;#modal-data&quot;).empty();
+				$(&quot;#modal-data&quot;).html(response.data);
+				$(&quot;#ModalAdd&quot;).modal(&#39;hide&#39;);
+				$(&#39;#modal-name&#39;).val(&#39;&#39;);
+				$(&#39;#description&#39;).val(&#39;&#39;);
+			},
+			error: function(e)
+			{
+				// Error function here
+			},
+			beforeSend:function(b){
+				// Before function here
+			}
+		})
+		.done(function(d) {
+			// When ajax finished
+		});
+	});
+&lt;/script&gt;
+
+&lt;!-- Ajax untuk update data--&gt; 
+&lt;script type=&quot;text/javascript&quot;&gt;
+    $(&#39;body&#39;).on(&#39;submit&#39;,&#39;#form-update&#39;, function(e){
+		e.preventDefault();
+		$.ajax({
+			method:  $(this).attr(&quot;method&quot;), // untuk mendapatkan attribut method pada form
+			url: $(this).attr(&quot;action&quot;),  // untuk mendapatkan attribut action pada form
+			data: { 
+				modal_id: $(&#39;#edit-id&#39;).val(),
+				modal_name: $(&#39;#edit-name&#39;).val(),
+				description: $(&#39;#edit-description&#39;).val(),
+			},
+			success:function(response){
+				console.log(response);
+				$(&quot;#modal-data&quot;).empty();
+				$(&quot;#modal-data&quot;).html(response.data);
+				$(&quot;#ModalEdit&quot;).modal(&#39;hide&#39;);
+			},
+			error: function(e)
+			{
+				// Error function here
+			},
+			beforeSend:function(b){
+				// Before function here
+			}
+		})
+		.done(function(d) {
+			// When ajax finished
+		});
+	});
+&lt;/script&gt;
+
+&lt;!-- Ajax untuk delete data--&gt; 
+&lt;script type=&quot;text/javascript&quot;&gt;
+    $(&#39;body&#39;).on(&#39;click&#39;,&#39;.delete_modal&#39;, function(e){
+		let modal_id = $(this).data(&#39;id&#39;);
+		$(&#39;#modal_delete&#39;).modal(&#39;show&#39;, {backdrop: &#39;static&#39;});
+		$(&quot;#delete_link&quot;).on(&quot;click&quot;, function(){
+			e.preventDefault();
+			$.ajax({
+				method:  &#39;POST&#39;, // untuk mendapatkan attribut method pada form
+				url: &#39;proses_delete.php&#39;,  // untuk mendapatkan attribut action pada form
+				data: { 
+					modal_id: modal_id
+				},
+				success:function(response){
+					console.log(response);
+					$(&quot;#modal-data&quot;).empty();
+					$(&quot;#modal-data&quot;).html(response.data);
+					$(&quot;#modal_delete&quot;).modal(&#39;hide&#39;);
+				},
+				error: function(e)
+				{
+					// Error function here
+				},
+				beforeSend:function(b){
+					// Before function here
+				}
+			})
+			.done(function(d) {
+				// When ajax finished
+			});
+		});
+	});
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+<p><strong>Langkah Keempat datatable</strong><br />
+Jika Anda ingin menggunakan Datatable buatlah file datatable.php (script ini bisa di letakkan di index.php), kemudian ketiklah atau copy kode dibawah ini</p>
+
+<pre data-codetype="PHP">
+&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;title&gt;CRUD PHP MySQLi Modal Bootstrap &amp; Datatable | Aguzrybudy.com&lt;/title&gt;
+&lt;meta content=&quot;width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0&quot; name=&quot;viewport&quot;/&gt;
+&lt;meta content=&quot;Aguzrybudy&quot; name=&quot;author&quot;/&gt;
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;DataTables/Bootstrap-4-4.1.1/css/bootstrap.min.css&quot;/&gt;
+&lt;link href=&quot;bootstrap/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;script src=&quot;jquery/jquery-3.3.1.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;bootstrap/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;
+&lt;!-- Untuk datatable --&gt;
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;datatables/datatables.min.css&quot;/&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;datatables/datatables.min.js&quot;&gt;&lt;/script&gt;
+	
+&lt;script type=&quot;text/javascript&quot;&gt;
+$(document).ready(function() {
+    $(&#39;#datatable&#39;).DataTable();
+});
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+ 
+&lt;div class=&quot;container mt-5 mb-5&quot;&gt;
+  &lt;h2&gt;CRUD PHP MySQLi Modal Bootstrap&lt;/h2&gt;
+  &lt;p&gt;CRUD PHP MySQLi Modal Bootstrap By Aguzrybudy, Rabu 06 November 2019&lt;/p&gt;
+  &lt;p class=&quot;text-right&quot;&gt;&lt;a href=&quot;javascript.void(0)&quot; class=&quot;btn btn-success&quot; data-target=&quot;#ModalAdd&quot; data-toggle=&quot;modal&quot;&gt;Add Data&lt;/a&gt; &lt;a href=&quot;index.php&quot; class=&quot;btn btn-info&quot; &gt;Back&lt;/a&gt;&lt;/p&gt;      
+
+&lt;table id=&quot;datatable&quot; class=&quot;table table-bordered&quot;&gt;
+    &lt;thead&gt;
+      &lt;th&gt;No&lt;/th&gt;
+      &lt;th&gt;Name&lt;/th&gt;
+      &lt;th&gt;Description&lt;/th&gt;
+      &lt;th&gt;Action&lt;/th&gt;
+    &lt;/thead&gt;
+	&lt;tbody id=&quot;modal-data&quot;&gt;
+&lt;?php 
+  //menampilkan data mysqli
+  include &quot;koneksi.php&quot;;
+  $no = 0;
+  $modal=mysqli_query($koneksi,&quot;SELECT * FROM modal ORDER BY modal_id DESC&quot;);
+  while($r=mysqli_fetch_array($modal)){
+  $no++;
+       
+?&gt;
+  &lt;tr&gt;
+      &lt;td&gt;&lt;?php echo $no; ?&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;?php echo  $r[&#39;modal_name&#39;]; ?&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;?php echo  $r[&#39;description&#39;]; ?&gt;&lt;/td&gt;
+      &lt;td&gt;
+         &lt;a href=&quot;javascript:void(0)&quot; class=&#39;open_modal&#39; id=&#39;&lt;?php echo  $r[&#39;modal_id&#39;]; ?&gt;&#39;&gt;Edit&lt;/a&gt;
+         &lt;a href=&quot;javascript:void(0)&quot; class=&quot;delete_modal&quot; data-id=&#39;&lt;?php echo  $r[&#39;modal_id&#39;]; ?&gt;&#39;&gt;Delete&lt;/a&gt;
+      &lt;/td&gt;
+  &lt;/tr&gt;
+ 
+
+&lt;?php } ?&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;!-- Modal Popup untuk Add--&gt; 
+&lt;div id=&quot;ModalAdd&quot; class=&quot;modal fade&quot; tabindex=&quot;-1&quot; role=&quot;dialog&quot; aria-labelledby=&quot;myModalLabel&quot; aria-hidden=&quot;true&quot;&gt;
+&lt;div class=&quot;modal-dialog&quot;&gt;
+    &lt;div class=&quot;modal-content&quot;&gt;
+
+      &lt;div class=&quot;modal-header&quot;&gt;
+        &lt;h5 class=&quot;modal-title&quot;&gt;Add Data Using Modal Boostrap (popup)&lt;/h5&gt;
+        &lt;button type=&quot;button&quot; class=&quot;close&quot; data-dismiss=&quot;modal&quot; aria-label=&quot;Close&quot;&gt;
+          &lt;span aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/span&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+
+        &lt;div class=&quot;modal-body&quot;&gt;
+          &lt;form id=&quot;form-save&quot; action=&quot;proses_save.php&quot; name=&quot;modal_popup&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;&gt;
+            
+                &lt;div class=&quot;form-group&quot; style=&quot;padding-bottom: 20px;&quot;&gt;
+                  &lt;label for=&quot;Modal Name&quot;&gt;Modal Name&lt;/label&gt;
+                  &lt;input type=&quot;text&quot; name=&quot;modal_name&quot;  id=&quot;modal-name&quot; class=&quot;form-control&quot; placeholder=&quot;Modal Name&quot; required/&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;form-group&quot; style=&quot;padding-bottom: 20px;&quot;&gt;
+                  &lt;label for=&quot;Description&quot;&gt;Description&lt;/label&gt;
+                   &lt;textarea name=&quot;description&quot; id=&quot;description&quot; class=&quot;form-control&quot; placeholder=&quot;Description&quot; required/&gt;&lt;/textarea&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;form-group&quot; style=&quot;padding-bottom: 20px;&quot;&gt;
+                  &lt;label for=&quot;Date&quot;&gt;Date&lt;/label&gt;
+                  &lt;input type=&quot;text&quot; name=&quot;date&quot;  class=&quot;form-control&quot; plcaceholder=&quot;Timestamp&quot; disabled value=&quot;&lt;?php echo date(&#39;Y-m-d H:i:s&#39;);?&gt;&quot; required/&gt;
+                &lt;/div&gt;
+
+              &lt;div class=&quot;modal-footer&quot;&gt;
+                  &lt;button class=&quot;btn btn-success&quot; type=&quot;submit&quot;&gt;
+                      Save
+                  &lt;/button&gt;
+
+                  &lt;button type=&quot;reset&quot; class=&quot;btn btn-danger&quot;  data-dismiss=&quot;modal&quot; aria-hidden=&quot;true&quot;&gt;
+                    Cancel
+                  &lt;/button&gt;
+              &lt;/div&gt;
+
+              &lt;/form&gt;
+
+           
+
+            &lt;/div&gt;
+
+           
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Modal Popup untuk Edit--&gt; 
+&lt;div id=&quot;ModalEdit&quot; class=&quot;modal fade&quot; tabindex=&quot;-1&quot; role=&quot;dialog&quot; aria-labelledby=&quot;myModalLabel&quot; aria-hidden=&quot;true&quot;&gt;
+
+&lt;/div&gt;
+
+&lt;!-- Modal Popup untuk delete--&gt; 
+&lt;div class=&quot;modal fade&quot; id=&quot;modal_delete&quot;&gt;
+  &lt;div class=&quot;modal-dialog&quot;&gt;
+    &lt;div class=&quot;modal-content&quot; style=&quot;margin-top:100px;&quot;&gt;
+       &lt;div class=&quot;modal-header&quot;&gt;
+        &lt;h5 class=&quot;modal-title&quot;&gt;Are you sure to delete this data ?&lt;/h5&gt;
+        &lt;button type=&quot;button&quot; class=&quot;close&quot; data-dismiss=&quot;modal&quot; aria-label=&quot;Close&quot;&gt;
+          &lt;span aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/span&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+                
+      &lt;div class=&quot;modal-footer&quot; style=&quot;margin:0px; border-top:0px; text-align:center;&quot;&gt;
+        &lt;a href=&quot;#&quot; class=&quot;btn btn-danger&quot; id=&quot;delete_link&quot;&gt;Delete&lt;/a&gt;
+        &lt;button type=&quot;button&quot; class=&quot;btn btn-success&quot; data-dismiss=&quot;modal&quot;&gt;Cancel&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Javascript untuk popup modal Edit--&gt; 
+&lt;script type=&quot;text/javascript&quot;&gt;
+ $(document).ready(function () {
+   $(&#39;#datatable&#39;).on(&#39;click&#39;, &#39;.open_modal&#39;, function(e){
+       var m = $(this).attr(&quot;id&quot;);
+		   $.ajax({
+    			   url: &quot;modal_edit.php&quot;,
+    			   type: &quot;GET&quot;,
+    			   data : {modal_id: m,},
+    			   success: function (ajaxData){
+      			   $(&quot;#ModalEdit&quot;).html(ajaxData);
+      			   $(&quot;#ModalEdit&quot;).modal(&#39;show&#39;,{backdrop: &#39;true&#39;});
+      		   }
+    		   });
+        });
+    });
+&lt;/script&gt;
+
+&lt;!-- Ajax untuk menyimpan data--&gt; 
+&lt;script type=&quot;text/javascript&quot;&gt;
+    $(&#39;body&#39;).on(&#39;submit&#39;,&#39;#form-save&#39;, function(e){
+		e.preventDefault();
+		$.ajax({
+			method:  $(this).attr(&quot;method&quot;), // untuk mendapatkan attribut method pada form
+			url: $(this).attr(&quot;action&quot;),  // untuk mendapatkan attribut action pada form
+			data: { 
+				modal_name: $(&#39;#modal-name&#39;).val(),
+				description: $(&#39;#description&#39;).val(),
+			},
+			success:function(response){
+				console.log(response);
+				$(&quot;#modal-data&quot;).empty();
+				$(&quot;#modal-data&quot;).html(response.data);
+				$(&quot;#ModalAdd&quot;).modal(&#39;hide&#39;);
+				$(&quot;.modal-backdrop&quot;).hide();
+			},
+			error: function(e)
+			{
+				// Error function here
+			},
+			beforeSend:function(b){
+				// Before function here
+			}
+		})
+		.done(function(d) {
+			// When ajax finished
+		});
+	});
+&lt;/script&gt;
+
+&lt;!-- Ajax untuk update data--&gt; 
+&lt;script type=&quot;text/javascript&quot;&gt;
+    $(&#39;body&#39;).on(&#39;submit&#39;,&#39;#form-update&#39;, function(e){
+		e.preventDefault();
+		$.ajax({
+			method:  $(this).attr(&quot;method&quot;), // untuk mendapatkan attribut method pada form
+			url: $(this).attr(&quot;action&quot;),  // untuk mendapatkan attribut action pada form
+			data: { 
+				modal_id: $(&#39;#edit-id&#39;).val(),
+				modal_name: $(&#39;#edit-name&#39;).val(),
+				description: $(&#39;#edit-description&#39;).val(),
+			},
+			success:function(response){
+				console.log(response);
+				$(&quot;#modal-data&quot;).empty();
+				$(&quot;#modal-data&quot;).html(response.data);
+				$(&quot;#ModalEdit&quot;).modal(&#39;hide&#39;);
+			},
+			error: function(e)
+			{
+				// Error function here
+			},
+			beforeSend:function(b){
+				// Before function here
+			}
+		})
+		.done(function(d) {
+			// When ajax finished
+		});
+	});
+&lt;/script&gt;
+
+&lt;!-- Ajax untuk delete data--&gt; 
+&lt;script type=&quot;text/javascript&quot;&gt;
+    $(&#39;body&#39;).on(&#39;click&#39;,&#39;.delete_modal&#39;, function(e){
+		let modal_id = $(this).data(&#39;id&#39;);
+		$(&#39;#modal_delete&#39;).modal(&#39;show&#39;, {backdrop: &#39;static&#39;});
+		$(&quot;#delete_link&quot;).on(&quot;click&quot;, function(){
+			e.preventDefault();
+			$.ajax({
+				method:  &#39;POST&#39;, // untuk mendapatkan attribut method pada form
+				url: &#39;proses_delete.php&#39;,  // untuk mendapatkan attribut action pada form
+				data: { 
+					modal_id: modal_id
+				},
+				success:function(response){
+					console.log(response);
+					$(&quot;#modal-data&quot;).empty();
+					$(&quot;#modal-data&quot;).html(response.data);
+					$(&quot;#modal_delete&quot;).modal(&#39;hide&#39;);
+
+				},
+				error: function(e)
+				{
+					// Error function here
+				},
+				beforeSend:function(b){
+					// Before function here
+				}
+			})
+			.done(function(d) {
+				// When ajax finished
+			});
+		});
+	});
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+<p><strong>Langkah Kelima</strong><br />
+Buat file dengan nama modal_edit.php :</p>
+
+<pre data-codetype="PHP">
+&lt;?php
+    include &quot;koneksi.php&quot;;
+	$modal_id=$_GET[&#39;modal_id&#39;];
+	$modal=mysqli_query($koneksi,&quot;SELECT * FROM modal WHERE modal_id=&#39;$modal_id&#39;&quot;);
+	while($r=mysqli_fetch_array($modal)){
+?&gt;
+
+&lt;div class=&quot;modal-dialog&quot;&gt;
+    &lt;div class=&quot;modal-content&quot;&gt;
+
+		&lt;div class=&quot;modal-header&quot;&gt;
+        &lt;h5 class=&quot;modal-title&quot;&gt;Edit Data Using Modal Boostrap (popup)&lt;/h5&gt;
+        &lt;button type=&quot;button&quot; class=&quot;close&quot; data-dismiss=&quot;modal&quot; aria-label=&quot;Close&quot;&gt;
+          &lt;span aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/span&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+
+        &lt;div class=&quot;modal-body&quot;&gt;
+        	&lt;form id=&quot;form-update&quot; action=&quot;proses_edit.php&quot; name=&quot;modal_popup&quot; enctype=&quot;multipart/form-data&quot; method=&quot;POST&quot;&gt;
+        		
+                &lt;div class=&quot;form-group&quot; style=&quot;padding-bottom: 20px;&quot;&gt;
+                	&lt;label for=&quot;Modal Name&quot;&gt;Modal Name&lt;/label&gt;
+                    &lt;input type=&quot;hidden&quot; name=&quot;modal_id&quot; id=&quot;edit-id&quot;  class=&quot;form-control&quot; value=&quot;&lt;?php echo $r[&#39;modal_id&#39;]; ?&gt;&quot; /&gt;
+     				&lt;input type=&quot;text&quot; name=&quot;modal_name&quot; id=&quot;edit-name&quot; class=&quot;form-control&quot; value=&quot;&lt;?php echo $r[&#39;modal_name&#39;]; ?&gt;&quot;/&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;form-group&quot; style=&quot;padding-bottom: 20px;&quot;&gt;
+                	&lt;label for=&quot;Description&quot;&gt;Description&lt;/label&gt;
+     				&lt;textarea name=&quot;description&quot; id=&quot;edit-description&quot; class=&quot;form-control&quot;&gt;&lt;?php echo $r[&#39;description&#39;]; ?&gt;&lt;/textarea&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;form-group&quot; style=&quot;padding-bottom: 20px;&quot;&gt;
+                	&lt;label for=&quot;Date&quot;&gt;Date&lt;/label&gt;       
+     				&lt;input type=&quot;text&quot; name=&quot;date&quot;  class=&quot;form-control&quot; value=&quot;&lt;?php echo $r[&#39;date&#39;]; ?&gt;&quot; disabled/&gt;
+                &lt;/div&gt;
+
+	            &lt;div class=&quot;modal-footer&quot;&gt;
+	                &lt;button class=&quot;btn btn-success&quot; type=&quot;submit&quot;&gt;
+	                    Update
+	                &lt;/button&gt;
+
+	                &lt;button type=&quot;reset&quot; class=&quot;btn btn-danger&quot;  data-dismiss=&quot;modal&quot; aria-hidden=&quot;true&quot;&gt;
+	               		Cancel
+	                &lt;/button&gt;
+	            &lt;/div&gt;
+
+            	&lt;/form&gt;
+
+             &lt;?php } ?&gt;
+
+            &lt;/div&gt;
+
+           
+        &lt;/div&gt;
+    &lt;/div&gt;</pre>
+
+<p><strong>Langkah Ketujuh</strong><br />
+Buat proses simpan data dengan nama proses_save.php</p>
+
+<pre data-codetype="PHP">
+&lt;?php
+include &quot;koneksi.php&quot;;
+$modal_name = $_POST[&#39;modal_name&#39;];
+$description = $_POST[&#39;description&#39;];
+$query = mysqli_query($koneksi,&quot;INSERT INTO modal (modal_name,description) VALUES (&#39;$modal_name&#39;,&#39;$description&#39;)&quot;);
+
+if($query) // jika insert data berhasil
+{
+	// fungsi untuk membuat format json
+	header(&#39;Content-Type: application/json&#39;);
+	// untuk load data yang sudah ada dari tabel
+	$content = file_get_contents(&#39;http://localhost/php7/modalajax/ajax_data.php&#39;, true);
+	$data = array(&#39;status&#39;=&gt;&#39;success&#39;, &#39;data&#39;=&gt; $content);
+	echo json_encode($data);
+}
+else // jika insert data gagal
+{
+	$data = array(&#39;status&#39;=&gt;&#39;failed&#39;, &#39;data&#39;=&gt; null);
+	echo json_encode($data);
+}
+
+?&gt;</pre>
+
+<p><strong>Langkah Kedelapan</strong><br />
+Buat proses edit data dengan nama proses_edit.php</p>
+
+<pre data-codetype="PHP">
+&lt;?php
+	include &quot;koneksi.php&quot;;
+	$modal_id=$_POST[&#39;modal_id&#39;];
+	$modal_name = $_POST[&#39;modal_name&#39;];
+	$description = $_POST[&#39;description&#39;];
+	$query=mysqli_query($koneksi,&quot;UPDATE modal SET modal_name = &#39;$modal_name&#39;,description = &#39;$description&#39; WHERE modal_id = &#39;$modal_id&#39;&quot;);
+	
+	if($query) // jika insert data berhasil
+	{
+		// fungsi untuk membuat format json
+		header(&#39;Content-Type: application/json&#39;);
+		// untuk load data yang sudah ada dari tabel
+		$content = file_get_contents(&#39;http://localhost/php7/modalajax/ajax_data.php&#39;, true);
+		$data = array(&#39;status&#39;=&gt;&#39;success&#39;, &#39;data&#39;=&gt; $content);
+		echo json_encode($data);
+	}
+	else // jika insert data gagal
+	{
+		$data = array(&#39;status&#39;=&gt;&#39;failed&#39;, &#39;data&#39;=&gt; null);
+		echo json_encode($data);
+	}
+?&gt;</pre>
+
+<p><strong>Langkah Kesembilan</strong><br />
+Buat proses delete data dengan nama proses_delete.php</p>
+
+<pre data-codetype="PHP">
+&lt;?php
+	include &quot;koneksi.php&quot;;
+	$modal_id=$_POST[&#39;modal_id&#39;];
+	$query=mysqli_query($koneksi,&quot;Delete FROM modal WHERE modal_id=&#39;$modal_id&#39;&quot;);
+	
+	
+	if($query) // jika insert data berhasil
+	{
+		// fungsi untuk membuat format json
+		header(&#39;Content-Type: application/json&#39;);
+		// untuk load data yang sudah ada dari tabel
+		$content = file_get_contents(&#39;http://localhost/php7/modalajax/ajax_data.php&#39;, true);
+		$data = array(&#39;status&#39;=&gt;&#39;success&#39;, &#39;data&#39;=&gt; $content);
+		echo json_encode($data);
+	}
+	else // jika insert data gagal
+	{
+		$data = array(&#39;status&#39;=&gt;&#39;failed&#39;, &#39;data&#39;=&gt; null);
+		echo json_encode($data);
+	}
+	
+?&gt;</pre>
+
+
+
+<p><strong>Langkah Kesepuluh</strong><br />
+Buat proses delete data dengan nama ajax_data.php</p>
+
+<pre data-codetype="PHP">&lt;?php //menampilkan data mysqli include &quot;koneksi.php&quot;; $no = 0; $modal=mysqli_query($koneksi,&quot;SELECT * FROM modal ORDER BY modal_id DESC&quot;); while($r=mysqli_fetch_array($modal)){ $no++; ?&gt; &lt;tr&gt; &lt;td&gt;&lt;?php echo $no; ?&gt;&lt;/td&gt; &lt;td&gt;&lt;?php echo $r[&#39;modal_name&#39;]; ?&gt;&lt;/td&gt; &lt;td&gt;&lt;?php echo $r[&#39;description&#39;]; ?&gt;&lt;/td&gt; &lt;td&gt; &lt;a href=&quot;javascript:void(0)&quot; class=&#39;open_modal&#39; id=&#39;&lt;?php echo $r[&#39;modal_id&#39;]; ?&gt;&#39;&gt;Edit&lt;/a&gt; &lt;a href=&quot;javascript:void(0)&quot; class=&quot;delete_modal&quot; data-id=&#39;&lt;?php echo $r[&#39;modal_id&#39;]; ?&gt;&#39;&gt;Delete&lt;/a&gt; &lt;/td&gt; &lt;/tr&gt; &lt;?php } ?&gt;</pre>
+
+<p><strong>Langkah Kesebelas</strong><br />
+Silahkan sobat test program yang sobat buat, jika berhasil maka indexnya akan muncul seperti gambar dibawah ini .</p>
+
+<div style="text-align:center">Add Data</div>
+
+<div class="box-image mb-5 mt-5" style="clear:both; text-align:center"><a href="https://4.bp.blogspot.com/-pCieEVEAPic/VxjAlEYxvuI/AAAAAAAAA8E/XfaWpcLjwE8ClILOLQgqHcm2nwK8k0V_wCLcB/s1600/Tips%2BCrud%2Bdengan%2BPopup4.png" style="margin-left: 1em; margin-right: 1em;"><img src="https://4.bp.blogspot.com/-pCieEVEAPic/VxjAlEYxvuI/AAAAAAAAA8E/XfaWpcLjwE8ClILOLQgqHcm2nwK8k0V_wCLcB/s320/Tips%2BCrud%2Bdengan%2BPopup4.png" style="height:179px; width:320px" /></a></div>
+
+<div style="text-align:center">&nbsp;Edit Data</div>
+
+<div class="box-image mb-5 mt-5" style="clear:both; text-align:center"><a href="https://4.bp.blogspot.com/-xh4xVnktIK8/VxjAk0rFouI/AAAAAAAAA8A/l1Piwi75fZg7In4sDn2fHb4-QBqQ5o_-wCLcB/s1600/Tips%2BCrud%2Bdengan%2BPopup.png" style="margin-left: 1em; margin-right: 1em;"><img src="https://4.bp.blogspot.com/-xh4xVnktIK8/VxjAk0rFouI/AAAAAAAAA8A/l1Piwi75fZg7In4sDn2fHb4-QBqQ5o_-wCLcB/s320/Tips%2BCrud%2Bdengan%2BPopup.png" style="height:179px; width:320px" /></a></div>
+
+<div style="text-align:center">&nbsp;Delete Data</div>
+
+<div class="box-image mb-5 mt-5" style="clear:both; text-align:center"><a href="https://3.bp.blogspot.com/-f0vqf0rm6Vo/VxjAlKc9nTI/AAAAAAAAA78/jS8J6c-8B2kmx9SGOLksPNj4U7kYhZSngCLcB/s1600/Tips%2BCrud%2Bdengan%2BPopup3.png" style="margin-left: 1em; margin-right: 1em;"><img src="https://3.bp.blogspot.com/-f0vqf0rm6Vo/VxjAlKc9nTI/AAAAAAAAA78/jS8J6c-8B2kmx9SGOLksPNj4U7kYhZSngCLcB/s320/Tips%2BCrud%2Bdengan%2BPopup3.png" style="height:179px; width:320px" /></a></div>
+
+<p><em>NB : Code diatas saya tulis menggunakan PHP 7 dan Boostrap 4. </em></p>
+
+<p>Sekian dulu tutorial dari saya, semoga tutorial ini bermanfaat bagi anda dan jika bermanfaat jangan lupa di share, atas segala kekuranganya mohon dimaafkan, jika ada yang ingin ditanyakan silahkan tinggalkan komentar.</p>
